@@ -159,7 +159,7 @@ void cleanup()
 
 int main(int argc,char** argv)
 {
-	int done = false;
+	int main_done = false;
 	int level=0;
 	ScoreSheet levelscore;
 	long totalscore=0;
@@ -188,17 +188,17 @@ int main(int argc,char** argv)
 	}
 #endif /* DEVELRELEASE */
 
-	done=intro();	
+	main_done=intro();	
 
-	if (!done && newuser)
+	if (!main_done && newuser)
 	{ // no options file; using the default
 		setcursor(CURSORCLICK);
-		if (popuphelp()==POPUPQUITGAME) done=true;
+		if (popuphelp()==POPUPQUITGAME) main_done=true;
 		setcursor(CURSORARROW);
 	}
 	
 		
- 	while(!done)
+ 	while(!main_done)
 	{
 		level++;
 		if (level>=MAXPENGUINS) level=MAXPENGUINS-1;
@@ -229,27 +229,31 @@ int main(int argc,char** argv)
 		switch (levelresult)
 		{
 			case QUIT:
-				done=true;
+				main_done=true;
+				//puts("Case quit!\n");
 			break;
 			case DEAD:
-				done=gameover(totalscore);
+				main_done=gameover(totalscore);
 			// falls through
+				//puts("Case dead!\n");
 			case ZERO:
 				// hooray! modifying the index variable in the loop!
 				// good coding practice at its finest!
 				level=0; 
 				totalscore=0; 
+				//puts("Case zero!\n");
 			break;
 			case ERROR:
 				fprintf(stderr,"Level error -- this should never happen.\n");
 			break;
 			case PASS:			
 				// level completed successfully
-				done=intermission(&levelscore,level+1);
+				main_done=intermission(&levelscore,level+1);
+				//puts("Case pass!\n");
 			break;
 		}
 
 	}
-	
+	puts("Reached the return point...");
 	return rc;
 }

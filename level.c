@@ -52,8 +52,8 @@ Line line2;
 Penguin flock[MAXPENGUINS];
 int penguincount=0;
 
-static int lives=0;
-static int clear=0;
+static long long lives=0;
+static long long clear=0;
 static long score=0;
 
 static void setuplevel(void);
@@ -124,7 +124,7 @@ LevelExitType playlevel(int level, long oldscore, ScoreSheet * levelscore)
 
 
 	penguincount=level+1;
-	lives=level+1;
+	lives=level*10+1;
 	clear=0;
 	score=oldscore;
 
