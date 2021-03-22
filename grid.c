@@ -33,7 +33,6 @@
 SDL_Surface* gridsave;
 char grid[WIDTH][HEIGHT];
 
-
 static char maskgrid[WIDTH][HEIGHT];
 
 // kludge-o-rama

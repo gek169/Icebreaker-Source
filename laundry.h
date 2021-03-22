@@ -28,6 +28,6 @@ extern void clean(void);
 extern void updateall(void);
 extern void initlaundry(void);
 
-#define MAXDIRTY 2000
+#define MAXDIRTY 200000
 
 #endif /* LAUNDRY_H */
