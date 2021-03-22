@@ -133,8 +133,8 @@
 #define BLOCKWIDTH 14
 #define BLOCKHEIGHT 14
 
-#define COLS 140
-#define ROWS 80
+#define COLS 110
+#define ROWS 60
 
 #define PLAYWIDTH (COLS*BLOCKWIDTH)
 #define PLAYHEIGHT (ROWS*BLOCKHEIGHT)
