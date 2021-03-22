@@ -1,0 +1,116 @@
+; icebreaker.nsi
+;
+; This script is used by the Nullsoft Scriptable Install System
+;
+; This is part of MingW on Fedora Linux, so we can cross-build
+; the installer as well as the program itself.
+
+Name "IceBreaker"
+OutFile "icebreaker-%ICEBREAKERVERSION.exe"
+
+BrandingText "Install System by Nullsoft"
+
+Icon "../icebreaker_16c.ico"
+WindowIcon on
+BGGradient off
+CRCCheck on
+
+InstallDir $PROGRAMFILES\IceBreaker
+InstallDirRegKey HKLM "Software\IceBreaker" "InstallDir"
+
+LicenseText "IceBreaker is Free Software; you can redistribute or modify it under the terms of the GNU GPL. Copyright (c) 2000-2021 Matthew Miller <mattdm@mattdm.org>, et al." "Continue"
+LicenseData "LICENSE.txt"
+
+InstallColors C0C0C0 404040
+InstProgressFlags smooth colored
+ShowInstDetails show
+
+SetOverwrite on
+SetCompress auto
+SetDatablockOptimize on
+SetDateSave on
+AutoCloseWindow true
+
+Section "IceBreaker"
+  SetOutPath $INSTDIR
+  File icebreaker.exe
+  File *.dll
+  File lockhelper.lck
+  SetFileAttributes $INSTDIR\lockhelper.lck FILE_ATTRIBUTE_HIDDEN
+  DetailPrint "Linux rules."
+  File *.wav 
+  File *.bmp
+  File *.ibt
+  File *.txt 
+  File *.tar.xz
+  WriteRegStr HKLM "Software\IceBreaker" "InstallDir" "$INSTDIR"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\IceBreaker" "DisplayName" "IceBreaker"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\IceBreaker" "UninstallString" '"$INSTDIR\uninstall.exe"'
+  WriteUninstaller "uninstall.exe"
+SectionEnd
+
+Section "Start Menu Shortcuts"
+  CreateDirectory "$SMPROGRAMS\IceBreaker"
+  CreateShortCut "$SMPROGRAMS\IceBreaker\IceBreaker.lnk" "$INSTDIR\icebreaker.exe" "" "$INSTDIR\icebreaker.exe" 0
+  CreateShortCut "$SMPROGRAMS\IceBreaker\ReadMe.lnk" "$INSTDIR\README.txt" "" "" 0
+  CreateShortCut "$SMPROGRAMS\IceBreaker\IceBreaker - fullscreen.lnk" "$INSTDIR\icebreaker.exe" "-f" "$INSTDIR\icebreaker.exe" 0
+  CreateShortCut "$SMPROGRAMS\IceBreaker\IceBreaker - random themes.lnk" "$INSTDIR\icebreaker.exe" "-trandom" "$INSTDIR\icebreaker.exe" 0
+  CreateShortCut "$SMPROGRAMS\IceBreaker\Uninstall.lnk" "$INSTDIR\uninstall.exe" "" "$INSTDIR\uninstall.exe" 0
+  DetailPrint "Installation Finished."
+SectionEnd
+
+UninstallText "This will delete IceBreaker from your computer. Hit Uninstall to continue, sadly."
+
+Section "Uninstall"
+  SetAutoClose false
+  SetDetailsView show
+
+  Delete "$SMPROGRAMS\IceBreaker\*.*"
+  RMDir "$SMPROGRAMS\IceBreaker"
+
+  DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\IceBreaker"
+  DeleteRegKey HKLM "Software\IceBreaker"
+
+  Delete $INSTDIR\lockhelper.lck
+  Delete $INSTDIR\icebreaker.exe
+  Delete $INSTDIR\*.dll
+  Delete $INSTDIR\*.wav 
+  Delete $INSTDIR\*.bmp 
+  Delete $INSTDIR\*.ibt
+  Delete $INSTDIR\*.txt 
+  Delete $INSTDIR\*.tar.xz
+  Delete $INSTDIR\uninstall.exe
+
+  IfFileExists $INSTDIR\icebreaker.cfg HaveCSFiles
+  IfFileExists $INSTDIR\icebreaker.scores HaveCSFiles EndDelCSFiles  
+  HaveCSFiles:
+    MessageBox MB_YESNO "Remove high score / configuration files?" IDNO NoDelCSFiles
+      Delete $INSTDIR\icebreaker.cfg
+      Delete $INSTDIR\icebreaker.scores
+      Goto EndDelCSFiles
+  NoDelCSFiles:
+    IfFileExists $INSTDIR\icebreaker.cfg NotRemCMesg CheckRemSMesg
+    NotRemCMesg:
+      DetailPrint "Not removing file $INSTDIR\icebreaker.cfg"
+    CheckRemSMesg:
+    IfFileExists $INSTDIR\icebreaker.scores NotRemSMesg EndDelCSFiles
+    NotRemSMesg:
+      DetailPrint "Not removing file $INSTDIR\icebreaker.scores"
+  EndDelCSFiles:  
+
+  IfFileExists $INSTDIR\icebreaker.* NoRMDir 
+    RMDir "$INSTDIR"
+    Goto EndRMDir
+  NoRMDir:
+    DetailPrint "Not removing directory $INSTDIR"   
+  EndRMDir:
+SectionEnd
+
+Function .onInstSuccess
+  MessageBox MB_YESNO "Installation Successful. Run IceBreaker now?" IDNO NoReadme
+    Exec $INSTDIR\icebreaker.exe
+  NoReadme:
+FunctionEnd
+
+
+; eof
