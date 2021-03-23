@@ -24,8 +24,7 @@
 #define LINE_H
 
 typedef enum { UP, DOWN, LEFT, RIGHT } LineDir;	
-typedef enum { HORIZONTAL, VERTICAL } LineType;
-
+typedef enum { HORIZONTAL, VERTICAL, HORIZONTAL_LEFT, HORIZONTAL_RIGHT, VERTICAL_UP, VERTICAL_DOWN } LineType;
 typedef struct
 {
 	int on;

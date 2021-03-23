@@ -60,7 +60,7 @@ static void setuplevel(void);
 
 static void levelaction_startclick(int mousex, int mousey, LineType linetype);
 static void levelaction_switchclick(LineType* linetypepointer);
-
+static void levelaction_switchclick_singles(LineType* linetypepointer);
 void setuplevel()
 {
 	int x,y;
@@ -210,8 +210,20 @@ LevelExitType playlevel(int level, long oldscore, ScoreSheet * levelscore)
 						case HORIZONTAL:
 							setcursor(CURSORHORIZONTAL);
 						break;
+						case HORIZONTAL_LEFT:
+							setcursor(CURSORHORIZONTAL_LEFT);
+						break;
+						case HORIZONTAL_RIGHT:
+							setcursor(CURSORHORIZONTAL_RIGHT);
+						break;
 						case VERTICAL:
 							setcursor(CURSORVERTICAL);
+						break;
+						case VERTICAL_UP:
+							setcursor(CURSORVERTICAL_UP);
+						break;
+						case VERTICAL_DOWN:
+							setcursor(CURSORVERTICAL_DOWN);
 						break;
 					}
 				}			
@@ -252,9 +264,11 @@ LevelExitType playlevel(int level, long oldscore, ScoreSheet * levelscore)
 						menubuttonpressed=true;
 					}
 				}
-  				else //middle or right
+  				else if(event.button.button==3)//right
   				{
   					levelaction_switchclick(&linetype);
+				} else if(event.button.button==2){
+					levelaction_switchclick_singles(&linetype);
 				}
 			}
 			else if (event.type == SDL_MOUSEBUTTONUP)
@@ -702,6 +716,22 @@ void levelaction_startclick(int mousex, int mousey, LineType linetype)
 				if (!line2.on)
 					(xdif<BLOCKWIDTH/2) ? startline(&line2,RIGHT,x,y) : startline(&line2,RIGHT,x+BLOCKWIDTH,y);
 			break;
+			case VERTICAL_UP:
+				if (!line1.on)
+					(ydif<BLOCKHEIGHT/2) ? startline(&line1,UP,x,y) : startline(&line1,UP,x,y+BLOCKHEIGHT);
+			break;
+			case VERTICAL_DOWN:
+				if (!line2.on)
+					(ydif<BLOCKHEIGHT/2) ? startline(&line2,DOWN,x,y) : startline(&line2,DOWN,x,y+BLOCKHEIGHT);
+			break;
+			case HORIZONTAL_LEFT:
+				if (!line1.on) 
+					(xdif<BLOCKWIDTH/2) ? startline(&line1,LEFT,x,y) : startline(&line1,LEFT,x+BLOCKWIDTH,y);
+			break;
+			case HORIZONTAL_RIGHT:
+				if (!line2.on)
+					(xdif<BLOCKWIDTH/2) ? startline(&line2,RIGHT,x,y) : startline(&line2,RIGHT,x+BLOCKWIDTH,y);
+			break;
 		}
 	}
 }
@@ -710,13 +740,44 @@ void levelaction_switchclick(LineType* linetypepointer)
 {
 	switch (*linetypepointer)
 	{
+		default:
 		case VERTICAL:
+		case VERTICAL_DOWN:
+		case VERTICAL_UP:
 			*linetypepointer=HORIZONTAL;
 			setcursor(CURSORHORIZONTAL); 
 		break;
 		case HORIZONTAL:
+		case HORIZONTAL_LEFT:
+		case HORIZONTAL_RIGHT:
 			*linetypepointer=VERTICAL;
 			setcursor(CURSORVERTICAL);
 		break;
+	}
+}
+
+void levelaction_switchclick_singles(LineType* linetypepointer)
+{
+	switch (*linetypepointer)
+	{
+		case VERTICAL:
+		case VERTICAL_DOWN:
+			*linetypepointer=VERTICAL_UP; 
+			setcursor(CURSORVERTICAL_UP);
+		break;
+		case VERTICAL_UP: 
+			*linetypepointer=VERTICAL_DOWN; 
+			setcursor(CURSORVERTICAL_DOWN);
+		break;
+		case HORIZONTAL:
+		case HORIZONTAL_RIGHT:
+			*linetypepointer=HORIZONTAL_LEFT;
+			setcursor(CURSORHORIZONTAL_LEFT); 
+		break;
+		case HORIZONTAL_LEFT: 
+			*linetypepointer=HORIZONTAL_RIGHT; 
+			setcursor(CURSORHORIZONTAL_RIGHT); 
+		break;
+		
 	}
 }

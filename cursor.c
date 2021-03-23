@@ -32,7 +32,11 @@ static SDL_Cursor* createcursor(const char *image[]);
 
 static SDL_Cursor* cursorarrow;
 static SDL_Cursor* cursorhorizontal;
+static SDL_Cursor* cursorhorizontal_left;
+static SDL_Cursor* cursorhorizontal_right;
 static SDL_Cursor* cursorvertical;
+static SDL_Cursor* cursorvertical_up;
+static SDL_Cursor* cursorvertical_down;
 static SDL_Cursor* cursorclick;
 
 
@@ -125,6 +129,92 @@ static const char *cursorhorizontalxpm[] = {
 "9,8"
 };
 
+static const char *cursorhorizontal_leftxpm[] = {
+/* width height num_colors chars_per_pixel */
+"    32    32        3            1",
+/* colors */
+"X c #000000",
+". c #ffffff",
+"  c None",
+/* pixels */
+"        X                       ",
+"       XX                       ",
+"      X.X                       ",
+"     X..X                       ",
+"    X...X                       ",
+"   X....X                       ",
+"  X.....XXX                     ",
+" X........X                     ",
+"X.........X                     ",
+" X........X                     ",
+"  X.....XXX                     ",
+"   X....X                       ",
+"    X...X                       ",
+"     X..X                       ",
+"      X.X                       ",
+"       XX                       ",
+"        X                       ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"9,8"
+};
+
+static const char *cursorhorizontal_rightxpm[] = {
+/* width height num_colors chars_per_pixel */
+"    32    32        3            1",
+/* colors */
+"X c #000000",
+". c #ffffff",
+"  c None",
+/* pixels */
+"          X                     ",
+"          XX                    ",
+"          X.X                   ",
+"          X..X                  ",
+"          X...X                 ",
+"          X....X                ",
+"        XXX.....X               ",
+"        X........X              ",
+"        X.........X             ",
+"        X........X              ",
+"        XXX.....X               ",
+"          X....X                ",
+"          X...X                 ",
+"          X..X                  ",
+"          X.X                   ",
+"          XX                    ",
+"          X                     ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"9,8"
+};
+
 /* XPM */
 static const char *cursorverticalxpm[] = {
 /* width height num_colors chars_per_pixel */
@@ -168,6 +258,96 @@ static const char *cursorverticalxpm[] = {
 "                                ",
 "8,9"
 };
+
+
+static const char *cursorvertical_upxpm[] = {
+/* width height num_colors chars_per_pixel */
+"    32    32        3            1",
+/* colors */
+"X c #000000",
+". c #ffffff",
+"  c None",
+/* pixels */
+"        X                       ",
+"       X.X                      ",
+"      X...X                     ",
+"     X.....X                    ",
+"    X.......X                   ",
+"   X.........X                  ",
+"  X...........X                 ",
+" X.............X                ",
+"XXXXXXX...XXXXXXX               ",
+"      X...X                     ",
+"      XXXXX                     ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"8,9"
+};
+
+
+static const char *cursorvertical_downxpm[] = {
+/* width height num_colors chars_per_pixel */
+"    32    32        3            1",
+/* colors */
+"X c #000000",
+". c #ffffff",
+"  c None",
+/* pixels */
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"      XXXXX                     ",
+"      X...X                     ",
+"XXXXXXX...XXXXXXX               ",
+" X.............X                ",
+"  X...........X                 ",
+"   X.........X                  ",
+"    X.......X                   ",
+"     X.....X                    ",
+"      X...X                     ",
+"       X.X                      ",
+"        X                       ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"8,9"
+};
+
+
 
 /* XPM */
 static const char *cursorclickxpm[] = {
@@ -268,8 +448,20 @@ void setcursor(CursorType c)
 			case CURSORHORIZONTAL:
 				SDL_SetCursor(cursorhorizontal);
 			break;
+			case CURSORHORIZONTAL_LEFT:
+				SDL_SetCursor(cursorhorizontal_left);
+			break;
+			case CURSORHORIZONTAL_RIGHT:
+				SDL_SetCursor(cursorhorizontal_right);
+			break;
 			case CURSORVERTICAL:
 				SDL_SetCursor(cursorvertical);
+			break;
+			case CURSORVERTICAL_UP:
+				SDL_SetCursor(cursorvertical_up);
+			break;
+			case CURSORVERTICAL_DOWN:
+				SDL_SetCursor(cursorvertical_down);
 			break;
 			case CURSORCLICK:
 				SDL_SetCursor(cursorclick);
@@ -284,7 +476,11 @@ void initcursors(void)
 	// fix -- add error checking
 	cursorarrow=createcursor(cursorarrowxpm);
 	cursorhorizontal=createcursor(cursorhorizontalxpm);
+	cursorhorizontal_left=createcursor(cursorhorizontal_leftxpm);
+	cursorhorizontal_right=createcursor(cursorhorizontal_rightxpm);
 	cursorvertical=createcursor(cursorverticalxpm);
+	cursorvertical_up=createcursor(cursorvertical_upxpm);
+	cursorvertical_down=createcursor(cursorvertical_downxpm);
 	cursorclick=createcursor(cursorclickxpm);
 }
 
@@ -293,6 +489,10 @@ void quitcursors(void)
 {
 	SDL_FreeCursor(cursorarrow);
 	SDL_FreeCursor(cursorhorizontal);
+	SDL_FreeCursor(cursorhorizontal_left);
+	SDL_FreeCursor(cursorhorizontal_right);
 	SDL_FreeCursor(cursorvertical);
+	SDL_FreeCursor(cursorvertical_up);
+	SDL_FreeCursor(cursorvertical_down);
 	SDL_FreeCursor(cursorclick);
 }
